@@ -1,8 +1,8 @@
 # File uploader
 ## Abstract
-This is an AWS serverless "file uploader" app that can be built and destroyed on demand.
+This is an AWS serverless "file uploader" app, that utilizes AWS Lambda, S3, IAM, Cloudwatch services.
 
-Created mainly with Terraform(TF) code, some Bash scripts
+Created mainly with Terraform(TF) code, some Bash scripts and <placeholder> for the Lambda code.
 
 ## Setting up the Environment
 setup_env.sh - Bash script that connects to the root account and runs TF code to create:
@@ -29,7 +29,7 @@ aws iam create-access-key --user-name "Assignment_User"
 
 ## Setting up the serverless app
 setup_env.sh
-* After the environment creation it calls another TF code under "sf-it-app"
+* After the environment setup it calls another TF code under "sf-it-app"
 
 ## Check if S3 bucket is public
 test.sh - Bash script which authenticates with the user credentials and checks with
