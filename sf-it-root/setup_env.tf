@@ -7,12 +7,12 @@ resource "aws_organizations_organization" "sf_organization" {
 
 resource "aws_organizations_account" "assignment_acc" {
   name              = "Assignment(temp)"
-  email             = "agesos@gmail.com"
-  role              = "OrganizationRole"
+  email             = "<placeholder_for_email>"
+  role_name         = "OrganizationRole"
   close_on_deletion = true
 }
 
-#In a specific scenario (or in a prod env) permissions would be more strict
+In a specific scenario (or in a prod env) permissions would be more strict
 resource "aws_organizations_policy" "allow_assignment_privs" {
   name        = "Assignment_limited_perms"
   description = "Allow limited permissions just for the assignment"
@@ -26,7 +26,8 @@ resource "aws_organizations_policy" "allow_assignment_privs" {
         "s3:*",
         "cloudwatch:*",
         "lambda:*",
-        "iam:*"
+        "iam:*",
+        "apigateway:*"
     ],
     "Resource": "*"
   }
@@ -36,7 +37,7 @@ CONTENT
 
 resource "aws_organizations_policy_attachment" "account" {
   policy_id = aws_organizations_policy.allow_assignment_privs.id
-  target_id = aws_organizations_organization.assignment_acc.id
+  target_id = aws_organizations_account.assignment_acc.id
 }
 
 
@@ -48,7 +49,7 @@ resource "aws_iam_user" "assignment_user" {
 }
 
 resource "aws_iam_access_key" "assignment_user_key" {
-  depends_on = [aws_organizations_account.assignment_acc]
+  depends_on = [aws_iam_user.assignment_user]
   user       = aws_iam_user.assignment_user.name
 
   provider = aws.users
@@ -56,7 +57,7 @@ resource "aws_iam_access_key" "assignment_user_key" {
 
 #No request for strict perms. SCP sets already a limit.
 resource "aws_iam_user_policy" "assignment_user_policy" {
-  depends_on = [aws_organizations_account.assignment_acc]
+  depends_on = [aws_iam_user.assignment_user]
   name       = "Assignment_User_Policy"
   user       = aws_iam_user.assignment_user.name
 
@@ -74,5 +75,4 @@ resource "aws_iam_user_policy" "assignment_user_policy" {
 EOF
 
   provider = aws.users
-
 }

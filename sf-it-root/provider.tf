@@ -13,7 +13,7 @@ provider "aws" {
 
 provider "aws" {
   assume_role {
-    role_arn = "arn:aws:iam::${aws_organizations_account.assignment_acc.id}:role/Admin"
+    role_arn = "arn:aws:iam::${aws_organizations_account.assignment_acc.id}:role/OrganizationRole"
   }
 
   alias  = "users"
