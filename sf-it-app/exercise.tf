@@ -68,7 +68,7 @@ resource "aws_apigatewayv2_api" "s3_uploader_api_gateway" {
     allow_origins = ["*"]
   }
 
-  target = module.s3_uploader_lambda_function.lambda_function_arn
+  target    = module.s3_uploader_lambda_function.lambda_function_arn
   route_key = "GET /upload"
 
   tags = local.tags
@@ -112,10 +112,10 @@ EOF
 # Lambda function
 #########################################
 data "archive_file" "lambda_zip" {
-  type        = "zip"
-  output_path = "/tmp/lambda.zip"
+  type             = "zip"
+  output_path      = "/tmp/lambda.zip"
   output_file_mode = "0666"
-	source_dir  = "${path.module}/src"
+  source_dir       = "${path.module}/src"
 }
 
 module "s3_uploader_lambda_function" {
@@ -127,14 +127,14 @@ module "s3_uploader_lambda_function" {
   handler       = "app.handler"
   runtime       = "nodejs12.x"
 
-  create_role     = true
-  publish   = true
+  create_role = true
+  publish     = true
 
   attach_policy = true
-  policy = module.s3_uploader_iam_policy.arn
+  policy        = module.s3_uploader_iam_policy.arn
 
-  create_package = false
-  local_existing_package         = "/tmp/lambda.zip"
+  create_package         = false
+  local_existing_package = "/tmp/lambda.zip"
 
   environment_variables = {
     UploadBucket = local.bucket_name
