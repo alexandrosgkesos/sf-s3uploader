@@ -47,6 +47,12 @@ Alternatively, the access key can be created with AWS CLI. In this case we can g
 aws iam create-access-key --user-name "Assignment_User"
 ```
 
+The IAM user has permissions to create more resources than the ones defined in the "sf-it-app" code, which would create an issue
+with the automated AWS account cleanup and even worse, would incur extra charges. Although, as "we" deploy the app and the App user
+just uses it, there is no "unexpected" risk. If for any reason we want reduce the risk even more and as we know the resources to be
+deployed, we can define in either SCP or IAM policy, only the required permissions and resources.
+eg. Create S3 bucket with this name or Create API Gateway v2 with this name, route arn, etc
+
 ### Serverless app deployment
 (The whole implementation is based on an official AWS Sample ([click me](https://github.com/aws-samples/amazon-s3-presigned-urls-aws-sam)),
 which creates all the resources with a AWS SAM template. In our case, each resource is defined separately.)
