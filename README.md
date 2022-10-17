@@ -51,13 +51,20 @@ The IAM user has permissions to create more resources than the ones defined in t
 with the automated AWS account cleanup and even worse, would incur extra charges. Although, as "we" deploy the app and the App user
 just uses it, there is no "unexpected" risk.
 
-IMPROVEMENT: As we know the resources to be deployed, we can define in either SCP or IAM policy, only the required permissions and resources.
+#### Improvement
+As we know the resources to be deployed, we can define in either SCP or IAM policy, only the required permissions and resources.
 eg. Create S3 bucket with this name or Create API Gateway v2 with that name, route arn, etc
 
 ### Serverless app deployment
-(The whole implementation is based on an official AWS Sample ([click me](https://github.com/aws-samples/amazon-s3-presigned-urls-aws-sam)),
-which creates all the resources with a AWS SAM template. In our case, each resource is defined separately.)
+The whole implementation is based on an official AWS Sample ([click me](https://github.com/aws-samples/amazon-s3-presigned-urls-aws-sam)), which creates all the resources with a AWS SAM template. In this code, each resource is defined separately.
+Also it creates a random number with JPG extension as file name and feeds it to the [getSignedUrlPromise](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#getSignedUrlPromise-property) method to request a pre-signed URL.
 
+#### Improvements
+- Pass the filename to the API endpoint and create the pre-signed URL based on that.
+  - Or use a different way eg. [POST + putObject methods](https://aws.plainenglish.io/how-to-upload-any-type-of-binary-file-to-s3-via-api-gateway-ec4d004e9d58)
+- Before creating the pre-signed URL, check S3 objects for file with the same name and either post a message or create the pre-signed URL with different key. eg. filename-date
+
+#### Implementation
 setup_env.sh - After the environment deployment, it calls another TF code under "sf-it-app" to create:
 * S3 bucket
 * API Gateway
